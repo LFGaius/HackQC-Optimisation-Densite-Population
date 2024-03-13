@@ -1,16 +1,35 @@
 import React, { useState } from "react";
 import Container from "react-bootstrap/Container";
 import { validateProperty, saveProperty } from './Propriete';
-import {
-  Navbar,
-  Nav,
-  Dropdown,Modal, Button, Form,
-} from "react-bootstrap";
+import {Navbar,Nav,Dropdown,Modal, Button, Form,Row, Col,} from "react-bootstrap";
 
 
 const FilterBar = ({onFilterChange}) => {
 
   const [show, setShow] = useState(false);
+
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [address, setAddress] = useState('');
+
+  const handleCheckboxChange = (e) => {
+    const option = e.target.name;
+    if (e.target.checked) {
+    } else {
+      setSelectedOptions(selectedOptions.filter(item => item !== option));
+    }
+  };
+
+  const handleAddressChange = (e) => {
+    setAddress(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Options sélectionnées :', selectedOptions);
+    console.log('Adresse saisie :', address);
+    // Ajoutez ici la logique de recherche ou de traitement des données
+  };
+
   const [property, setProperty] = useState({
     buildingType: '',
     unitsAvailable: '',
@@ -51,9 +70,9 @@ const FilterBar = ({onFilterChange}) => {
     <>
     <Container>
       <Navbar bg="light" className="my-2 p-2">
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mr-auto d-flex ">
-            <Dropdown className="mx-2">
+        <Navbar.Collapse id="basic-navbar-nav justify-content-center">
+          <Nav className="mr-auto d-flex">
+            <Dropdown className="">
               <Dropdown.Toggle variant="light">
                 {propertyType || 'Ville'}
               </Dropdown.Toggle>
@@ -64,6 +83,36 @@ const FilterBar = ({onFilterChange}) => {
                 <Dropdown.Item onClick={() => handlePropertyTypeChange('Sherbrooke')}>Sherbrooke</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
+            <Form onSubmit={handleSubmit} >
+              <Form.Group>
+                <Row>
+                  <Col className="">
+                    <Form.Check
+                      type="checkbox"
+                      label="Zone Cyclable"
+                      name="zoneCyclable"
+                      onChange={handleCheckboxChange}
+                    />
+                  </Col>
+                  <Col className="">
+                    <Form.Check
+                      type="checkbox"
+                      label="Indices de qualité"
+                      name="indicesQualite"
+                      onChange={handleCheckboxChange}
+                    />
+                  </Col>
+                  <Col className="">
+                    <Form.Check
+                      type="checkbox"
+                      label="Permis de travaux"
+                      name="permisTravaux"
+                      onChange={handleCheckboxChange}
+                    />
+                  </Col>
+                </Row>
+              </Form.Group>
+            </Form>
 
             <a href="#" className="btn btn-secondary" onClick={handleShow}>Ajouter une propriete</a>
             
@@ -71,7 +120,7 @@ const FilterBar = ({onFilterChange}) => {
         </Navbar.Collapse>
       </Navbar>
     </Container>
-
+   
     <Modal show={show} onHide={handleClose}>
     <Modal.Header closeButton>
       <Modal.Title>Ajouter une propriété</Modal.Title>

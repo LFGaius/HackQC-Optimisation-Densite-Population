@@ -6,14 +6,14 @@ const NavbarComponent = () => {
   return (
     <Navbar bg="light" expand="lg">
       <Container>
-        <Navbar.Brand href="#home">STRATIOTES</Navbar.Brand>
+        <Navbar.Brand href="#home" className='text-info'>STRATIOTES</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className=' justify-content-center'>
           <Nav className="mr-auto">
-            <Nav.Link href="#link">À Propos</Nav.Link>
-            <Nav.Link href="#link">Se Connecter</Nav.Link>
-            <Nav.Link href="#link">S'Inscrire</Nav.Link>
-            <NavDropdown title="User" id="basic-nav-dropdown">
+            <Nav.Link href="#link">À PROPOS</Nav.Link>
+            <Nav.Link href="#link">SE CONNECTER</Nav.Link>
+            <Nav.Link href="#link">S'INSCRIRE</Nav.Link>
+            <NavDropdown title="USER" id="basic-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">Profil</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">Profil</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.3">Déconnexion</NavDropdown.Item>
