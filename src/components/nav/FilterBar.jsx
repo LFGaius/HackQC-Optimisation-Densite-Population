@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import Container from "react-bootstrap/Container";
+import { validateProperty, saveProperty } from './Propriete';
 import {
   Navbar,
   Nav,
   Dropdown,Modal, Button, Form,
 } from "react-bootstrap";
 
+
 const FilterBar = ({onFilterChange}) => {
-////////////////////////////////
 
   const [show, setShow] = useState(false);
   const [property, setProperty] = useState({
@@ -15,7 +16,8 @@ const FilterBar = ({onFilterChange}) => {
     unitsAvailable: '',
     state: '',
     deliveryDate: '',
-    address: ''
+    address: '',
+    contact: ''
   });
 
   const handleClose = () => setShow(false);
@@ -27,30 +29,22 @@ const FilterBar = ({onFilterChange}) => {
   };
 
   const handleSave = () => {
-    // Logique de validation et sauvegarde des données ici
-    console.log(property);
-    // Réinitialiser le formulaire après la sauvegarde
-    setProperty({
-      buildingType: '',
-      unitsAvailable: '',
-      state: '',
-      deliveryDate: '',
-      address: ''
-    });
-    setShow(false);
+    const validationResult = validateProperty(property);
+    if (validationResult.isValid) {
+      const savedProperty = saveProperty(property);
+      setProperty(savedProperty);
+      setShow(false);
+    } else {
+      console.error("Erreur de validation :", validationResult.errorMessage);
+      // Gérer les erreurs de validation ici, par exemple afficher un message d'erreur à l'utilisateur
+    }
   };
 
   const [propertyType, setPropertyType] = useState('');
-  const [priceRange, setPriceRange] = useState('');
 
   const handlePropertyTypeChange = (type) => {
     setPropertyType(type);
-    onFilterChange({ propertyType: type, priceRange });
-  };
-
-  const handlePriceRangeChange = (range) => {
-    setPriceRange(range);
-    onFilterChange({ propertyType, priceRange: range });
+    onFilterChange({ propertyType: type });
   };
 
   return (
@@ -65,9 +59,9 @@ const FilterBar = ({onFilterChange}) => {
               </Dropdown.Toggle>
 
               <Dropdown.Menu>
-                <Dropdown.Item onClick={() => handlePropertyTypeChange('Appartement')}>Appartement</Dropdown.Item>
-                <Dropdown.Item onClick={() => handlePropertyTypeChange('Maison')}>Maison</Dropdown.Item>
-                <Dropdown.Item onClick={() => handlePropertyTypeChange('Terrain')}>Terrain</Dropdown.Item>
+                <Dropdown.Item onClick={() => handlePropertyTypeChange('Montréal')}>Montréal</Dropdown.Item>
+                <Dropdown.Item onClick={() => handlePropertyTypeChange('Shawiningan')}>Shawiningan</Dropdown.Item>
+                <Dropdown.Item onClick={() => handlePropertyTypeChange('Sherbrooke')}>Sherbrooke</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
 
@@ -83,7 +77,7 @@ const FilterBar = ({onFilterChange}) => {
       <Modal.Title>Ajouter une propriété</Modal.Title>
     </Modal.Header>
     <Modal.Body>
-      <Form>
+      <Form method="POST" >
         <Form.Group controlId="buildingType">
           <Form.Label>Type de bâtiment</Form.Label>
           <Form.Control as="select" name="buildingType" value={property.buildingType} onChange={handleChange}>
@@ -95,7 +89,7 @@ const FilterBar = ({onFilterChange}) => {
 
         <Form.Group controlId="unitsAvailable">
           <Form.Label>Nombre d'unités libres</Form.Label>
-          <Form.Control type="text" name="unitsAvailable" value={property.unitsAvailable} onChange={handleChange} />
+          <Form.Control type="number" name="unitsAvailable" value={property.unitsAvailable} onChange={handleChange} />
         </Form.Group>
 
         <Form.Group controlId="state">
@@ -116,7 +110,12 @@ const FilterBar = ({onFilterChange}) => {
 
         <Form.Group controlId="address">
           <Form.Label>Adresse</Form.Label>
-          <Form.Control type="text" name="address" value={property.address} onChange={handleChange} />
+          <Form.Control type="adresse" name="address" value={property.address} onChange={handleChange} />
+        </Form.Group>
+
+        <Form.Group controlId="contact">
+          <Form.Label>Contact</Form.Label>
+          <Form.Control type="number" name="contact" value={property.contact} onChange={handleChange} />
         </Form.Group>
       </Form>
     </Modal.Body>
@@ -129,6 +128,8 @@ const FilterBar = ({onFilterChange}) => {
       </Button>
     </Modal.Footer>
   </Modal>
+
+
   </>
   );
 };
