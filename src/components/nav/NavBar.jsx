@@ -16,7 +16,7 @@ const NavbarComponent = () => {
             <NavDropdown title="User" id="basic-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">Profil</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">Profil</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Profil</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.3">Déconnexion</NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>

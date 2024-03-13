@@ -71,7 +71,7 @@ const MapComponent = () => {
             position={marker.position}
             icon={{
               url:marker.icon,
-              scaledSize: new window.google.maps.Size(40, 40)
+              scaledSize: new window.google.maps.Size(50, 50)
             }}
           />
       ))}
