@@ -6,7 +6,7 @@ const NavbarComponent = () => {
   return (
     <Navbar bg="light" expand="lg">
       <Container>
-        <Navbar.Brand href="#home" className='text-info'>STRATIOTES</Navbar.Brand>
+        <Navbar.Brand href="#home" className='text-info font-weight-bold'>STRATIOTES</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className=' justify-content-center'>
           <Nav className="mr-auto">
