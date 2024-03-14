@@ -1,21 +1,16 @@
 import React,{useState} from 'react';
-import { validateProperty, saveProperty } from './ProprieteAction';
+import { validateProperty, saveProperty, propertys } from './ProprieteAction';
 import {Card, Modal, Button, Form,Row, Col,} from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 export const Proprietes = () => {
   
+  const propriete = propertys();
+
   const [show, setShow] = useState(false);
   const [proprieteEtendue, setProprieteEtendue] = useState(null);
 
-  const propriete = [
-    { id: 1, user: 'Jedeon',contact:'(514) 567 567', adress:'1 Ville-Marie',buildingType:'Duplex',unitsAvailable:'9',state:'Fonctionnel', commentaire: "Ceci est une description  ReactJS est très populaire, car c'est un framework idéal pour la création de tout type de plateforme" },
-    { id: 2, user: 'Halime', contact:'(514) 566 566', adress:'2 rue Berri-UQAM',buildingType:'Triplex',unitsAvailable:'4',state:'En Construction', commentaire: 'Ceci est une description  A.Ceci est une description  A.Ceci est une description  A.Ceci est une description  A.Ceci est une description  A.Ceci est une description  A.' },
-    { id: 3, user: 'Galius', contact:'(514) 565 565', adress:'30 Pierre-Tétreaut',buildingType:'Triplex',unitsAvailable:'12',state:'Fonctionnel', commentaire: " Il couvre tous les domaines, principalement le développement mobile, Web et natif. Les développeurs ReactJS sont facilement capables de gérer divers contextes de développement d'interface utilisateur."},
-    { id: 4, user: 'Samuel', contact:'(514) 564 564', adress:'4040 Rue Ontario Est',buildingType:'Duplex',unitsAvailable:'5',state:'En Construction', commentaire: "React est une bibliothèque JavaScript open-source qui est utilisée pour construire des interfaces utilisateur spécifiquement pour des applications d'une seule page. Elle est utilisée pour gérer la couche d'affichage des applications web et mobiles" },
-  ]; 
-  
   // fonctio pour gérer l'affichage de la suite du texte
 
   const toggleAfficherSuite = (id) => {

@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import { validateReview, saveReview } from './AvisAction';
+import { validateReview, saveReview, avisL } from './AvisAction';
 import {Card,Modal, Button, Form,Row, Col,} from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -8,12 +8,7 @@ export const Avis = () => {
   
   const [show, setShow] = useState(false);
 
-  const avis = [
-    { id: 1, user: 'Jedeon', commentaire: 'Ceci est un avis sur la ville A.' },
-    { id: 2, user: 'Halime', commentaire: 'Ceci est un avis sur le Quatier B.' },
-    { id: 3, user: 'Galius', commentaire: "Ceci est un avis sur l'Arondicement C.Ceci est un avis sur l'Arondicement C." },
-    { id: 3, user: 'Samuel', commentaire: 'Ceci est un avis sur la Rue D.' },
-  ];
+  const avis = avisL();
 
   const [review, setReview] = useState({name: '',emailAddress: '',comment: ''});
 

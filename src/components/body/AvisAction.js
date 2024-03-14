@@ -21,4 +21,15 @@ const saveReview = (review) => {
   };
 };
 
-export { validateReview, saveReview };
+const avisL = () => {
+  const avisList = [
+    { id: 1, user: 'Jedeon', commentaire: 'Ceci est un avis sur la ville A.' },
+    { id: 2, user: 'Halime', commentaire: 'Ceci est un avis sur le Quatier B.' },
+    { id: 3, user: 'Galius', commentaire: "Ceci est un avis sur l'Arondicement C.Ceci est un avis sur l'Arondicement C." },
+    { id: 3, user: 'Samuel', commentaire: 'Ceci est un avis sur la Rue D.' },
+  ];
+
+  return avisList;
+};
+
+export { validateReview, saveReview, avisL };

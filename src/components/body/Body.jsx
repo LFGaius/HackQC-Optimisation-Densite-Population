@@ -14,10 +14,9 @@ const Body = () => {
   };
   return (
     <> 
-      <FilterBar onFilterChange={handleFilterChange} />
-        
+      <FilterBar onFilterChange={handleFilterChange} />       
       <Row>
-        <Col xs={12} lg={8} className='ml-2'> 
+        <Col xs={12} lg={8} className='ml-2 border'> 
           <Container>
             <MapComponent />
           </Container>
