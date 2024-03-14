@@ -15,14 +15,14 @@ const Body = () => {
   return (
     <> 
       <FilterBar onFilterChange={handleFilterChange} />
-    <Row>
-      <Col xs={12} lg={9}> 
-        <MapComponent />
-      </Col>
-      <Col xs={12} lg={3}> 
-        <SideBar />
-      </Col>
-    </Row>
+      <Row>
+        <Col xs={12} lg={9}> 
+          <MapComponent />
+        </Col>
+        <Col xs={12} lg={3}> 
+          <SideBar />
+        </Col>
+      </Row>
     </>
   );
 };
