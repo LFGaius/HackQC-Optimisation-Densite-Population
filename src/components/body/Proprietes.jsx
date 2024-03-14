@@ -2,19 +2,26 @@ import React,{useState} from 'react';
 import { validateProperty, saveProperty } from './ProprieteAction';
 import {Card, Modal, Button, Form,Row, Col,} from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 export const Proprietes = () => {
   
   const [show, setShow] = useState(false);
+  const [proprieteEtendue, setProprieteEtendue] = useState(null);
 
   const propriete = [
-    { id: 1, user: 'Jedeon', commentaire: 'Ceci est un avis sur la ville A.' },
-    { id: 2, user: 'Halime', commentaire: 'Ceci est un avis sur le Quatier B.' },
-    { id: 3, user: 'Galius', commentaire: "Ceci est un avis sur l'Arondicement C.Ceci est un avis sur l'Arondicement C." },
-    { id: 3, user: 'Samuel', commentaire: 'Ceci est un avis sur la Rue D.' },
-  ];
+    { id: 1, user: 'Jedeon',contact:'(514) 567 567', adress:'1 Ville-Marie',buildingType:'Duplex',unitsAvailable:'9',state:'Fonctionnel', commentaire: "Ceci est une description  ReactJS est très populaire, car c'est un framework idéal pour la création de tout type de plateforme" },
+    { id: 2, user: 'Halime', contact:'(514) 566 566', adress:'2 rue Berri-UQAM',buildingType:'Triplex',unitsAvailable:'4',state:'En Construction', commentaire: 'Ceci est une description  A.Ceci est une description  A.Ceci est une description  A.Ceci est une description  A.Ceci est une description  A.Ceci est une description  A.' },
+    { id: 3, user: 'Galius', contact:'(514) 565 565', adress:'30 Pierre-Tétreaut',buildingType:'Triplex',unitsAvailable:'12',state:'Fonctionnel', commentaire: " Il couvre tous les domaines, principalement le développement mobile, Web et natif. Les développeurs ReactJS sont facilement capables de gérer divers contextes de développement d'interface utilisateur."},
+    { id: 4, user: 'Samuel', contact:'(514) 564 564', adress:'4040 Rue Ontario Est',buildingType:'Duplex',unitsAvailable:'5',state:'En Construction', commentaire: "React est une bibliothèque JavaScript open-source qui est utilisée pour construire des interfaces utilisateur spécifiquement pour des applications d'une seule page. Elle est utilisée pour gérer la couche d'affichage des applications web et mobiles" },
+  ]; 
+  
+  // fonctio pour gérer l'affichage de la suite du texte
 
+  const toggleAfficherSuite = (id) => {
+    setProprieteEtendue(proprieteEtendue === id ? null : id); // Inverser l'état d'affichage de la suite du texte
+  };
+  ////
   const [property, setProperty] = useState({buildingType: '',unitsAvailable: '',state: '',deliveryDate: '',address: '',contact: ''});
 
   const handleClose = () => setShow(false);
@@ -42,17 +49,29 @@ export const Proprietes = () => {
   };
   return (
     <>
-      <div className='p-4 border'>
-        <h3 className="mt-5">Avis de la population</h3>
-        <button  className="btn btn-info  w-10 my-2" onClick={handleShow} style={{ fontWeight: 'bold' }}><FontAwesomeIcon icon={faPlus} />Ajouter une propriete</button>
-       
+      <div className='p-2 pt-0'>
+        <h3 className="mt-5">Annonces des propriétaires</h3>
+        <button  className="btn btn-light text-info  w-10 my-2" onClick={handleShow} style={{ fontWeight: 'bold' }}><FontAwesomeIcon icon={faPlus} />Ajouter Annonces</button>
         <Row className="justify-content-center">
           {propriete.map((proprieteItem) => (
             <Col key={proprieteItem.id} xs={12} md={12} lg={12} className="mb-4">
               <Card className="shadow-sm">
                 <Card.Body>
-                  <Card.Title className='text-info'>{proprieteItem.user}</Card.Title>
-                  <Card.Text>{proprieteItem.commentaire}</Card.Text>
+                  <Card.Title className='text-primary'>{proprieteItem.user}</Card.Title>
+                  <Card.Text>Contact: {proprieteItem.contact}</Card.Text>
+                  <Card.Text>Adresse: {proprieteItem.adress}</Card.Text>
+                  <Card.Text>Type de proprieté: {proprieteItem.buildingType}</Card.Text>
+                  <Card.Text>Nombre Unités: {proprieteItem.unitsAvailable}</Card.Text>
+                  <Card.Text>Status: {proprieteItem.state}</Card.Text>
+                  <h5>
+                    Description
+                    <Button variant="link" onClick={() => toggleAfficherSuite(proprieteItem.id)}>
+                      <FontAwesomeIcon icon={faChevronDown} />
+                    </Button>
+                  </h5>
+                  <Card.Text>
+                    {proprieteEtendue === proprieteItem.id ? proprieteItem.commentaire : `${proprieteItem.commentaire.slice(0, 100)}...`}
+                  </Card.Text>
                 </Card.Body>
               </Card>
             </Col>
@@ -62,7 +81,7 @@ export const Proprietes = () => {
       
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Ajouter une propriété</Modal.Title>
+          <Modal.Title>Ajouter une Annonce</Modal.Title>
           </Modal.Header>
             <Modal.Body>
               <Form method="POST" >

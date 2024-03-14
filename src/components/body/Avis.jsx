@@ -42,7 +42,7 @@ export const Avis = () => {
   };
   return (
     <>
-      <section className='p-4 border'>
+      <section className='p-2 pt-0'>
         <h3 className="mt-5">Avis de la population</h3>
         <button  className="btn btn-info  w-10 my-2" onClick={handleShow} style={{ fontWeight: 'bold' }}><FontAwesomeIcon icon={faPlus} />Ajouter une propriete</button>
        

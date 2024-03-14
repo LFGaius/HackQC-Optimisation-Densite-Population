@@ -17,10 +17,12 @@ const Body = () => {
       <FilterBar onFilterChange={handleFilterChange} />
         
       <Row>
-        <Col xs={12} lg={9}> 
-          <MapComponent />
+        <Col xs={12} lg={8} className='ml-2'> 
+          <Container>
+            <MapComponent />
+          </Container>
         </Col>
-        <Col xs={12} lg={3}> 
+        <Col xs={12} lg={4} className='border'> 
           <SideBar />
         </Col>
       </Row>
