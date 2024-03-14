@@ -1,19 +1,19 @@
 
 import React, { useEffect, useState } from 'react';
 import { GoogleMap, MarkerF, useLoadScript } from '@react-google-maps/api';
-import { database } from '../firebase-config';
+import { database } from '.../firebase-config';
 import { ref, set, onValue } from 'firebase/database';
-import busStopIcon from '../assets/images/bus-stop.png';
-import publicPlaceIcon from '../assets/images/public-place.png';
-import buildingIcon from '../assets/images/build.png';
-import permitIcon from '../assets/images/permit.png';
-import planDeZonageShawingan from '../assets/data/plan_de_zonage_shawingan.json';
-import zonageSherbrooke from '../assets/data/zonage-sherbrooke.json';
-import indiceEquiteMilieuxVie from '../assets/data/indice-equite-milieux-vie.json';
-import reseauCyclableMtl from '../assets/data/reseau_cyclable_mtl.json';
-import reseauCyclableShawinigan from '../assets/data/reseau_cyclable_shawinigan.json';
-import parcsEspacesVertsShawinigan from '../assets/data/parcs_espaces_verts_shawinigan.json';
-import parcsEspacesVertsMtl from '../assets/data/parcs_espaces_verts_mtl.json';
+import busStopIcon from '.../assets/images/bus-stop.png';
+import publicPlaceIcon from '.../assets/images/public-place.png';
+import buildingIcon from '.../assets/images/build.png';
+import permitIcon from '.../assets/images/permit.png';
+import planDeZonageShawingan from '.../assets/data/plan_de_zonage_shawingan.json';
+import zonageSherbrooke from '.../assets/data/zonage-sherbrooke.json';
+import indiceEquiteMilieuxVie from '.../assets/data/indice-equite-milieux-vie.json';
+import reseauCyclableMtl from '.../assets/data/reseau_cyclable_mtl.json';
+import reseauCyclableShawinigan from '.../assets/data/reseau_cyclable_shawinigan.json';
+import parcsEspacesVertsShawinigan from '.../assets/data/parcs_espaces_verts_shawinigan.json';
+import parcsEspacesVertsMtl from '.../assets/data/parcs_espaces_verts_mtl.json';
 
 const PUBLIC_PLACES_MTL_ENDPOINT = 'https://donnees.montreal.ca/api/3/action/datastore_search?resource_id=4731b64f-29cc-4e08-bc44-8752ae2fcafb&limit=200';
 const BUILD_PERMITS_MTL_ENDPOINT = 'https://donnees.montreal.ca/api/3/action/datastore_search?resource_id=5232a72d-235a-48eb-ae20-bb9d501300ad&limit=200';
