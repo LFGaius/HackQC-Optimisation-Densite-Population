@@ -49,7 +49,7 @@ export const Proprietes = () => {
         <button  className="btn btn-light text-info  w-10 my-2" onClick={handleShow} style={{ fontWeight: 'bold' }}><FontAwesomeIcon icon={faPlus} />Ajouter Annonces</button>
         <Row className="justify-content-center">
           {propriete.map((proprieteItem) => (
-            <Col key={proprieteItem.id} xs={12} md={12} lg={12} className="mb-4">
+            <Col key={proprieteItem.id} xs={12} md={6} lg={6} className="mb-4">
               <Card className="shadow-sm">
                 <Card.Body>
                   <Card.Title className='text-primary'>{proprieteItem.user}</Card.Title>
@@ -65,7 +65,7 @@ export const Proprietes = () => {
                     </Button>
                   </h5>
                   <Card.Text>
-                    {proprieteEtendue === proprieteItem.id ? proprieteItem.commentaire : `${proprieteItem.commentaire.slice(0, 100)}...`}
+                    {proprieteEtendue === proprieteItem.id ? proprieteItem.commentaire : `${proprieteItem.commentaire.slice(0, 90)}...`}
                   </Card.Text>
                 </Card.Body>
               </Card>
