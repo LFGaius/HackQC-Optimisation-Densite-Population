@@ -1,7 +1,7 @@
 // Fonction de validation des données de propriété
 const validateProperty = (property) => {
 
-  if (!property.buildingType || !property.unitsAvailable || !property.state || !property.address) {
+  if (!property.buildingType || !property.unitsAvailable || !property.status || !property.address) {
     return { isValid: false, errorMessage: "Veuillez remplir tous les champs obligatoires." };
   }
 
@@ -16,7 +16,7 @@ const saveProperty = (property) => {
   return {
     buildingType: '',
     unitsAvailable: '',
-    state: '',
+    status: '',
     deliveryDate: '',
     address: '',
     contact: ''

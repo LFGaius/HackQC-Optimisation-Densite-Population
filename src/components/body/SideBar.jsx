@@ -13,7 +13,7 @@ export const SideBar = () => {
           <Nav.Link className='btn btn-info ' href="/" style={{ fontWeight: 'bold' }}>Avis</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link href="/propriete" style={{ fontWeight: 'bold' }}>Proprietes</Nav.Link>
+          <Nav.Link className='btn btn-info ' href="/propriete" style={{ fontWeight: 'bold' }}>Proprietes</Nav.Link>
         </Nav.Item>
       </Nav>
       <hr/>

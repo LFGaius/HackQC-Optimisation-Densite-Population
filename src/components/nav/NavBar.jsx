@@ -5,12 +5,12 @@ import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 const NavbarComponent = () => {
   return (
     <Navbar bg="light" expand="lg">
-      <Container>
-        <Navbar.Brand href="#home" className='text-info' style={{ fontWeight: 'bold' }}>STRATIOTES</Navbar.Brand>
+      <Container fluid>
+        <Navbar.Brand href="#home" className='text-info font-weight-bold'>STRATIOTES</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className=' justify-content-center'>
           <Nav className="mr-auto">
-            <Nav.Link href="#link">A LOUER</Nav.Link>
+            {/* <Nav.Link href="#link">A LOUER</Nav.Link> */}
             <Nav.Link href="#link">À PROPOS</Nav.Link>
             <Nav.Link href="#link">SE CONNECTER</Nav.Link>
             <Nav.Link href="#link">S'INSCRIRE</Nav.Link>
