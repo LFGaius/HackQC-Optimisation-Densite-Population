@@ -40,7 +40,7 @@ const FilterBar = ({onFilterChange}) => {
           <Container>
           <Nav className="mr-auto space-between">
           <Row>
-            <Col className="col-10">
+            <Col className="col-12">
               <Form onSubmit={handleSubmit} >
                 <Form.Group>
                   <Row>
