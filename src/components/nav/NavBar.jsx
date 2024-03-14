@@ -10,6 +10,7 @@ const NavbarComponent = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className=' justify-content-center'>
           <Nav className="mr-auto">
+            <Nav.Link href="#link">A LOUER</Nav.Link>
             <Nav.Link href="#link">À PROPOS</Nav.Link>
             <Nav.Link href="#link">SE CONNECTER</Nav.Link>
             <Nav.Link href="#link">S'INSCRIRE</Nav.Link>
