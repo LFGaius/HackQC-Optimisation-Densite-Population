@@ -1,7 +1,7 @@
 // Fonction de validation des Avis
 const validateReview = (review) => {
 
-  if (!review.name || !review.emailAddress || !review.comment) {
+  if (!review.name || !review.email || !review.commentaire) {
     return { isValid: false, errorMessage: "Veuillez remplir tous les champs obligatoires." };
   }
 
@@ -16,8 +16,8 @@ const saveReview = (review) => {
   // Réinitialiser le formulaire après la sauvegarde
   return {
     name: '',
-    emailAddress: '',
-    comment: ''
+    email: '',
+    commentaire: ''
   };
 };
 

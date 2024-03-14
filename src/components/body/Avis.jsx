@@ -1,21 +1,25 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import { validateReview, saveReview } from './AvisAction';
 import {Card,Modal, Button, Form,Row, Col,} from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { database } from '../../firebase-config';
+import { ref, set, onValue } from 'firebase/database';
 
 export const Avis = () => {
   
   const [show, setShow] = useState(false);
 
-  const avis = [
-    { id: 1, user: 'Jedeon', commentaire: 'Ceci est un avis sur la ville A.' },
-    { id: 2, user: 'Halime', commentaire: 'Ceci est un avis sur le Quatier B.' },
-    { id: 3, user: 'Galius', commentaire: "Ceci est un avis sur l'Arondicement C.Ceci est un avis sur l'Arondicement C." },
-    { id: 3, user: 'Samuel', commentaire: 'Ceci est un avis sur la Rue D.' },
-  ];
+  const [review, setReview] = useState({name: '',email: '',commentaire: ''});
+  const [avis, setAvis] = useState([]);
 
-  const [review, setReview] = useState({name: '',emailAddress: '',comment: ''});
+  useEffect(() => {
+    onValue(ref(database, 'comments'), (snapshot) => {debugger
+      const data = snapshot.val();
+      setAvis(data);
+    });
+  }, []); // The empty array ensures this effect runs only once after the initial render
+
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -25,13 +29,16 @@ export const Avis = () => {
     setReview({ ...review, [name]: value });
   };
 
-  const handleSave = () => {
+  const handleSave = () => {debugger
     const validationResult = validateReview(review);
     if (validationResult.isValid) {
-      const savedReview = saveReview(review);
-      setReview(savedReview);
+      review.id = avis.length;
+      review.user = 'General';
+      set(ref(database, 'comments/'+avis.length+''), review);
+      // const savedReview = saveReview(review);
+      // setReview(savedReview);
 
-      alert("Donnees enregistre avec succes")
+      // alert("Donnees enregistre avec succes")
 
       setShow(false);
     } else {
@@ -44,14 +51,14 @@ export const Avis = () => {
     <>
       <section className='p-2 pt-0'>
         <h3 className="mt-5">Avis de la population</h3>
-        <button  className="btn btn-info  w-10 my-2" onClick={handleShow} style={{ fontWeight: 'bold' }}><FontAwesomeIcon icon={faPlus} />Ajouter une propriete</button>
+        <button  className="btn btn-info  w-10 my-2" onClick={handleShow} style={{ fontWeight: 'bold', color : 'white'  }}><FontAwesomeIcon icon={faPlus}/>Ajouter un avis</button>
        
         <Row className="justify-content-center">
           {avis.map((avisItem) => (
             <Col key={avisItem.id} xs={12} md={12} lg={12} className="mb-4">
               <Card className="shadow-sm">
                 <Card.Body>
-                  <Card.Title className='text-info'>{avisItem.user}</Card.Title>
+                  <Card.Title className='text-info'>{avisItem.name}</Card.Title>
                   <Card.Text>{avisItem.commentaire}</Card.Text>
                 </Card.Body>
               </Card>
@@ -72,14 +79,14 @@ export const Avis = () => {
                   <Form.Control type="text" name="name" value={review.name} onChange={handleChange} />
                 </Form.Group>
 
-                <Form.Group controlId="emailAddress">
+                <Form.Group controlId="email">
                   <Form.Label>Email</Form.Label>
-                  <Form.Control type="text" name="emailAddress" value={review.emailAddress} onChange={handleChange} />
+                  <Form.Control type="text" name="email" value={review.email} onChange={handleChange} />
                 </Form.Group>
 
-                <Form.Group controlId="comment">
+                <Form.Group controlId="commentaire">
                   <Form.Label>Commentaire</Form.Label>
-                  <Form.Control as="textarea" rows={3} name="comment" value={review.comment} onChange={handleChange} placeholder="Ajouter un commentaire"/>
+                  <Form.Control as="textarea" rows={3} name="commentaire" value={review.commentaire} onChange={handleChange} placeholder="Ajouter un commentaire"/>
                 </Form.Group>
               </Form>
             </Modal.Body>

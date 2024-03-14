@@ -6,11 +6,12 @@ import FilterBar from '../nav/FilterBar';
 
 const Body = () => {
 
-  const [filters, setFilters] = useState({ propertyType: '', priceRange: '' });
+  const [filters, setFilters] = useState({city:"montreal", displayIndiceEquiteMilieuxVie : false, displayZonage : false, displayReseauCyclable : false, displayParcsEspacesVerts : false, displayPointArretBus : false, displayPlacesPubliques : false, displayPermis : false});
+  const [childKey, setChildKey] = useState(0);
 
-  const handleFilterChange = (newFilters) => {
-    setFilters(newFilters);
-    console.log('Nouveaux filtres sélectionnés :', newFilters);
+  const handleFilterChange = (selectedOptions) => {debugger
+    setFilters(selectedOptions);
+    setChildKey(childKey+1);//just to enforce reload
   };
   return (
     <> 
@@ -19,7 +20,7 @@ const Body = () => {
       <Row>
         <Col xs={12} lg={8} className='ml-2'> 
           <Container>
-            <MapComponent />
+          <MapComponent filtersMap = {filters} key={childKey}/>
           </Container>
         </Col>
         <Col xs={12} lg={4} className='border'> 
