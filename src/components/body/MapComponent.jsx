@@ -1,10 +1,10 @@
 
 import React from 'react';
 import { GoogleMap, MarkerF, useLoadScript, PolygonF } from '@react-google-maps/api';
-import buildIcon from '../assets/images/build.png';
-import houseIcon from '../assets/images/house.png';
-import parkIcon from '../assets/images/park.png';
-import storeIcon from '../assets/images/store.png';
+import buildIcon from '../../assets/images/build.png';
+import houseIcon from '../../assets/images/house.png';
+import parkIcon from '../../assets/images/park.png';
+import storeIcon from '../../assets/images/store.png';
 const containerStyle = {
   width: '50%',
   height: '50vh'
@@ -71,7 +71,7 @@ const MapComponent = () => {
             position={marker.position}
             icon={{
               url:marker.icon,
-              scaledSize: new window.google.maps.Size(40, 40)
+              scaledSize: new window.google.maps.Size(50, 50)
             }}
           />
       ))}
