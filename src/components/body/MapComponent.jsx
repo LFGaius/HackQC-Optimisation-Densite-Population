@@ -1,40 +1,41 @@
 
 import React, { useEffect, useState } from 'react';
 import { GoogleMap, MarkerF, useLoadScript } from '@react-google-maps/api';
-import { database } from '.../firebase-config';
+import { database } from '../../firebase-config';
 import { ref, set, onValue } from 'firebase/database';
-import busStopIcon from '.../assets/images/bus-stop.png';
-import publicPlaceIcon from '.../assets/images/public-place.png';
-import buildingIcon from '.../assets/images/build.png';
-import permitIcon from '.../assets/images/permit.png';
-import planDeZonageShawingan from '.../assets/data/plan_de_zonage_shawingan.json';
-import zonageSherbrooke from '.../assets/data/zonage-sherbrooke.json';
-import indiceEquiteMilieuxVie from '.../assets/data/indice-equite-milieux-vie.json';
-import reseauCyclableMtl from '.../assets/data/reseau_cyclable_mtl.json';
-import reseauCyclableShawinigan from '.../assets/data/reseau_cyclable_shawinigan.json';
-import parcsEspacesVertsShawinigan from '.../assets/data/parcs_espaces_verts_shawinigan.json';
-import parcsEspacesVertsMtl from '.../assets/data/parcs_espaces_verts_mtl.json';
+import busStopIcon from '../../assets/images/bus-stop.png';
+import publicPlaceIcon from '../../assets/images/public-place.png';
+import buildingIcon from '../../assets/images/build.png';
+import permitIcon from '../../assets/images/permit.png';
+import planDeZonageShawingan from '../../assets/data/plan_de_zonage_shawingan.json';
+import zonageSherbrooke from '../../assets/data/zonage-sherbrooke.json';
+import indiceEquiteMilieuxVie from '../../assets/data/indice-equite-milieux-vie.json';
+import reseauCyclableMtl from '../../assets/data/reseau_cyclable_mtl.json';
+import reseauCyclableShawinigan from '../../assets/data/reseau_cyclable_shawinigan.json';
+import parcsEspacesVertsShawinigan from '../../assets/data/parcs_espaces_verts_shawinigan.json';
+import parcsEspacesVertsMtl from '../../assets/data/parcs_espaces_verts_mtl.json';
 
 const PUBLIC_PLACES_MTL_ENDPOINT = 'https://donnees.montreal.ca/api/3/action/datastore_search?resource_id=4731b64f-29cc-4e08-bc44-8752ae2fcafb&limit=200';
 const BUILD_PERMITS_MTL_ENDPOINT = 'https://donnees.montreal.ca/api/3/action/datastore_search?resource_id=5232a72d-235a-48eb-ae20-bb9d501300ad&limit=200';
 const BUS_STOPS_SHAWI_ENDPOINT = 'https://www.donneesquebec.ca/recherche/api/3/action/datastore_search?resource_id=0ff3c32b-5955-40e9-99d5-baa993c1d910&limit=105';
 
 const containerStyle = {
-  width: '50%',
-  height: '50vh'
+  width: '100%',
+  height: '100vh'
 };
 
-const mapTypeId = {
+const mapTypeId = { 
   HYBRID: 'hybrid',
   ROADMAP: 'roadmap',
   SATELLITE: 'satellite',
   TERRAIN: 'terrain'
 };
 
-const MapComponent = (params) => { 
+const MapComponent = ({filtersMap}) => { 
   // Use `useLoadScript` to ensure Google Maps API script is loaded
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: `${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`
+    googleMapsApiKey: `${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`,
+    libraries:['places']
   });
 
   const [map, setMap] = useState(null);
@@ -81,31 +82,31 @@ const MapComponent = (params) => {
 
   const onLoad = map=>{
     setMap(map);
-    switch (params.filtersMap.city) {
+    switch (filtersMap.city) {
       case 'sherbrooke':
         setCenter({
           lat: 45.404476,
           lng: -71.888351
         });
-        if(params.filtersMap.displayZonage) map.data.addGeoJson(zonageSherbrooke);
+        if(filtersMap.displayZonage) map.data.addGeoJson(zonageSherbrooke);
         break;
       case 'montreal':
         setCenter({
           lat: 45.508888,
           lng: -73.561668
         });
-        if(params.filtersMap.displayIndiceEquiteMilieuxVie) map.data.addGeoJson(indiceEquiteMilieuxVie);
-        if(params.filtersMap.displayReseauCyclable) map.data.addGeoJson(reseauCyclableMtl);
-        if(params.filtersMap.displayParcsEspacesVerts) map.data.addGeoJson(parcsEspacesVertsMtl);
+        if(filtersMap.displayIndiceEquiteMilieuxVie) map.data.addGeoJson(indiceEquiteMilieuxVie);
+        if(filtersMap.displayReseauCyclable) map.data.addGeoJson(reseauCyclableMtl);
+        if(filtersMap.displayParcsEspacesVerts) map.data.addGeoJson(parcsEspacesVertsMtl);
         break;
       case 'shawinigan':
         setCenter({
           lat: 46.566666,
           lng: -72.750000
         });
-        if(params.filtersMap.displayZonage) map.data.addGeoJson(planDeZonageShawingan);
-        if(params.filtersMap.displayReseauCyclable) map.data.addGeoJson(reseauCyclableShawinigan);
-        if(params.filtersMap.displayParcsEspacesVerts) map.data.addGeoJson(parcsEspacesVertsShawinigan);
+        if(filtersMap.displayZonage) map.data.addGeoJson(planDeZonageShawingan);
+        if(filtersMap.displayReseauCyclable) map.data.addGeoJson(reseauCyclableShawinigan);
+        if(filtersMap.displayParcsEspacesVerts) map.data.addGeoJson(parcsEspacesVertsShawinigan);
         break;
       default:
         break;
@@ -198,9 +199,9 @@ const MapComponent = (params) => {
         onValue(ref(database, 'properties'), (snapshot) => {debugger
           const data = snapshot.val();
           setDataProperties(data.reduce((acc, p)=>{
-            acc[`${p.city}`] = (acc[`${p.city}`] || []).concat([p])
+            acc[`${p.city}`] = acc[`${p.city}`].concat([p])
             return acc;
-          }, {}));
+          }, { montreal : [], sherbrooke : [], shawinigan : []}));
         });
         const responsePublicPlacesMtl = await fetch(PUBLIC_PLACES_MTL_ENDPOINT);
         const responseBuildPermitsMtl = await fetch(BUILD_PERMITS_MTL_ENDPOINT);
@@ -227,35 +228,35 @@ const MapComponent = (params) => {
 
   useEffect(() => {
     setAllMarkers(
-      (params.filtersMap.displayPlacesPubliques ? dataPublicPlaces[`${params.filtersMap.city}`].map((r,i)=>({
+      (filtersMap.displayPlacesPubliques ? dataPublicPlaces[`${filtersMap.city}`].map((r,i)=>({
         position: { lng: Number(r.lat), lat: Number(r.long) },//due to an error in the data set
         icon: publicPlaceIcon,
         title:'public-place'+i,
         ...r
       })) : [])
       .concat(
-        params.filtersMap.displayPermis ? dataBuildPermits[`${params.filtersMap.city}`].map((r,i)=>({
+        filtersMap.displayPermis ? dataBuildPermits[`${filtersMap.city}`].map((r,i)=>({
         position: { lat: Number(r.latitude), lng: Number(r.longitude) },//due to an error in the data set
         icon: permitIcon,
         title:'build-permit'+i,
         ...r
       })) : [])
       .concat(
-        params.filtersMap.displayPointArretBus ? dataBusStops[`${params.filtersMap.city}`].map((r,i)=>({
+        filtersMap.displayPointArretBus ? dataBusStops[`${filtersMap.city}`].map((r,i)=>({
         position: { lng: Number(r.latitude), lat: Number(r.longitude) },//due to an error in the data set
         icon: busStopIcon,
         title:'bus-stop'+i,
         ...r
       })) : [])
       .concat(
-        dataProperties[`${params.filtersMap.city}`].map((r,i)=>({
+        dataProperties[`${filtersMap.city}`].map((r,i)=>({
         position: { lng: Number(r.lng), lat: Number(r.lat) },//due to an error in the data set
         icon: buildingIcon,
         title:'property'+i,
         ...r
       })))
     );
-  }, [dataProperties, params.filtersMap.city, params.filtersMap.displayPermis, params.filtersMap.displayPlacesPubliques, params.filtersMap.displayPointArretBus, dataPublicPlaces, dataBuildPermits, dataBusStops]); // To ensure the effect runs every time one of those values changes
+  }, [dataProperties, filtersMap, dataPublicPlaces, dataBuildPermits, dataBusStops]); // To ensure the effect runs every time one of those values changes
 
   if (!isLoaded) return <div>Loading...</div>;
 
@@ -280,6 +281,7 @@ const MapComponent = (params) => {
             }}
           />
       ))}
+      
     </GoogleMap>
   );
 }

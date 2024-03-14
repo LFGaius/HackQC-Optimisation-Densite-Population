@@ -1,28 +1,30 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import { validateProperty, saveProperty } from './ProprieteAction';
 import {Card, Modal, Button, Form,Row, Col,} from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { database } from '../../firebase-config';
+import { ref, set, onValue } from 'firebase/database';
 
 export const Proprietes = () => {
-  
+
   const [show, setShow] = useState(false);
   const [proprieteEtendue, setProprieteEtendue] = useState(null);
+  const [propriete, setPropriete] = useState([]);
 
-  const propriete = [
-    { id: 1, user: 'Jedeon',contact:'(514) 567 567', adress:'1 Ville-Marie',buildingType:'Duplex',unitsAvailable:'9',state:'Fonctionnel', commentaire: "Ceci est une description  ReactJS est très populaire, car c'est un framework idéal pour la création de tout type de plateforme" },
-    { id: 2, user: 'Halime', contact:'(514) 566 566', adress:'2 rue Berri-UQAM',buildingType:'Triplex',unitsAvailable:'4',state:'En Construction', commentaire: 'Ceci est une description  A.Ceci est une description  A.Ceci est une description  A.Ceci est une description  A.Ceci est une description  A.Ceci est une description  A.' },
-    { id: 3, user: 'Galius', contact:'(514) 565 565', adress:'30 Pierre-Tétreaut',buildingType:'Triplex',unitsAvailable:'12',state:'Fonctionnel', commentaire: " Il couvre tous les domaines, principalement le développement mobile, Web et natif. Les développeurs ReactJS sont facilement capables de gérer divers contextes de développement d'interface utilisateur."},
-    { id: 4, user: 'Samuel', contact:'(514) 564 564', adress:'4040 Rue Ontario Est',buildingType:'Duplex',unitsAvailable:'5',state:'En Construction', commentaire: "React est une bibliothèque JavaScript open-source qui est utilisée pour construire des interfaces utilisateur spécifiquement pour des applications d'une seule page. Elle est utilisée pour gérer la couche d'affichage des applications web et mobiles" },
-  ]; 
+  useEffect(() => {
+    onValue(ref(database, 'properties'), (snapshot) => {debugger
+      const data = snapshot.val();
+      setPropriete(data);
+    });
+  }, []); // The empty array ensures this effect runs only once after the initial render 
   
   // fonctio pour gérer l'affichage de la suite du texte
-
   const toggleAfficherSuite = (id) => {
     setProprieteEtendue(proprieteEtendue === id ? null : id); // Inverser l'état d'affichage de la suite du texte
   };
-  ////
-  const [property, setProperty] = useState({buildingType: '',unitsAvailable: '',state: '',deliveryDate: '',address: '',contact: ''});
+
+  const [property, setProperty] = useState({buildingType: '',unitsAvailable: '',status: '',deliveryDate: '',address: '',contact: ''});
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -32,13 +34,31 @@ export const Proprietes = () => {
     setProperty({ ...property, [name]: value });
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const validationResult = validateProperty(property);
     if (validationResult.isValid) {
       const savedProperty = saveProperty(property);
       setProperty(savedProperty);
+      const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(property.address)}&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
+      try {debugger
+          const response = await fetch(url);
+          const data = await response.json();
+          if (data.status === 'OK') {
+            const { lat, lng } = data.results[0].geometry.location;
+            property.city = 'montreal';
+            property.id = propriete.length;
+            property.lng = lng;
+            property.lat = lat;
+            property.user = 'General';
+            set(ref(database, 'properties/'+propriete.length+''), property);
+          } else {
+            console.error('Geocoding failed:', data.status);
+          }
+        } catch (error) {
+          console.error('Geocoding error:', error);
+        }
 
-      alert("Donnees enregistre avec succes")
+      // alert("Donnees enregistre avec succes")
       
       setShow(false);
     } else {
@@ -48,10 +68,10 @@ export const Proprietes = () => {
     }
   };
   return (
-    <>
+    <>     
       <div className='p-2 pt-0'>
         <h3 className="mt-5">Annonces des propriétaires</h3>
-        <button  className="btn btn-light text-info  w-10 my-2" onClick={handleShow} style={{ fontWeight: 'bold' }}><FontAwesomeIcon icon={faPlus} />Ajouter Annonces</button>
+        <button  className="btn btn-info  w-10 my-2" onClick={handleShow} style={{ fontWeight: 'bold', color : 'white' }}><FontAwesomeIcon icon={faPlus} />Ajouter Annonces</button>
         <Row className="justify-content-center">
           {propriete.map((proprieteItem) => (
             <Col key={proprieteItem.id} xs={12} md={12} lg={12} className="mb-4">
@@ -59,10 +79,10 @@ export const Proprietes = () => {
                 <Card.Body>
                   <Card.Title className='text-primary'>{proprieteItem.user}</Card.Title>
                   <Card.Text>Contact: {proprieteItem.contact}</Card.Text>
-                  <Card.Text>Adresse: {proprieteItem.adress}</Card.Text>
+                  <Card.Text>Adresse: {proprieteItem.address}</Card.Text>
                   <Card.Text>Type de proprieté: {proprieteItem.buildingType}</Card.Text>
                   <Card.Text>Nombre Unités: {proprieteItem.unitsAvailable}</Card.Text>
-                  <Card.Text>Status: {proprieteItem.state}</Card.Text>
+                  <Card.Text>Status: {proprieteItem.status}</Card.Text>
                   <h5>
                     Description
                     <Button variant="link" onClick={() => toggleAfficherSuite(proprieteItem.id)}>
@@ -70,7 +90,7 @@ export const Proprietes = () => {
                     </Button>
                   </h5>
                   <Card.Text>
-                    {proprieteEtendue === proprieteItem.id ? proprieteItem.commentaire : `${proprieteItem.commentaire.slice(0, 100)}...`}
+                    {proprieteEtendue === proprieteItem.id ? proprieteItem.comment : `${proprieteItem.comment?.slice(0, 100)}...`}
                   </Card.Text>
                 </Card.Body>
               </Card>
@@ -81,7 +101,7 @@ export const Proprietes = () => {
       
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Ajouter une Annonce</Modal.Title>
+          <Modal.Title>Ajouter une Annonce de location</Modal.Title>
           </Modal.Header>
             <Modal.Body>
               <Form method="POST" >
@@ -99,16 +119,16 @@ export const Proprietes = () => {
                   <Form.Control type="number" name="unitsAvailable" value={property.unitsAvailable} onChange={handleChange} />
                 </Form.Group>
 
-                <Form.Group controlId="state">
+                <Form.Group controlId="status">
                   <Form.Label>État</Form.Label>
-                  <Form.Control as="select" name="state" value={property.state} onChange={handleChange}>
+                  <Form.Control as="select" name="status" value={property.status} onChange={handleChange}>
                     <option value="">Sélectionner...</option>
                     <option value="En construction">En construction</option>
                     <option value="Fonctionnel">Fonctionnel</option>
                   </Form.Control>
                 </Form.Group>
 
-                {property.state === 'En construction' && (
+                {property.status === 'En construction' && (
                   <Form.Group controlId="deliveryDate">
                     <Form.Label>Date de livraison du chantier</Form.Label>
                     <Form.Control type="date" name="deliveryDate" value={property.deliveryDate} onChange={handleChange} />
@@ -117,12 +137,12 @@ export const Proprietes = () => {
 
                 <Form.Group controlId="address">
                   <Form.Label>Adresse</Form.Label>
-                  <Form.Control type="adresse" name="address" value={property.address} onChange={handleChange} />
+                  <Form.Control type="address" name="address" value={property.address} onChange={handleChange} />
                 </Form.Group>
 
                 <Form.Group controlId="contact">
                   <Form.Label>Contact</Form.Label>
-                  <Form.Control type="number" name="contact" value={property.contact} onChange={handleChange} />
+                  <Form.Control type="text" name="contact" value={property.contact} onChange={handleChange} />
                 </Form.Group>
               </Form>
             </Modal.Body>
