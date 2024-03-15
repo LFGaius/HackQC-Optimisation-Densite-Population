@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { GoogleMap, MarkerF, useLoadScript } from '@react-google-maps/api';
 import { database } from '../../firebase-config';
-import { ref, set, onValue } from 'firebase/database';
+import { ref, onValue } from 'firebase/database';
 import busStopIcon from '../../assets/images/bus-stop.png';
 import publicPlaceIcon from '../../assets/images/public-place.png';
 import buildingIcon from '../../assets/images/build.png';
@@ -47,32 +47,45 @@ const MapComponent = ({filtersMap}) => {
   const [dataProperties, setDataProperties] = useState({ montreal : [], sherbrooke : [], shawinigan : []});
   
 
-  const onClickMarker = (marker) => {debugger
+  const onClickMarker = (marker) => {
     const currentMarker = allMarkers.find(m=>marker.title === m.title);
     let infowindow = new window.google.maps.InfoWindow({
-      content: `${currentMarker.titre_lieu ? '<b>titre_lieu : </b>' + currentMarker.titre_lieu  : ''}  ${currentMarker.id_permis? '<b>id_permis: </b>' + currentMarker.id_permis : ''} 
-      ${currentMarker.date_debut? '</br><b>date_debut: </b>' + currentMarker.date_debut : ''} 
-      ${currentMarker.date_emission? '</br><b>date_emission: </b>' + currentMarker.date_emission : ''} 
-      ${currentMarker.emplacement? '</br><b>emplacement: </b>' + currentMarker.emplacement : ''} 
-      ${currentMarker.arrondissement? '</br><b>arrondissement: </b>' + currentMarker.arrondissement : ''} 
-      ${currentMarker.code_type_base_demande? '</br><b>code_type_base_demande: </b>' + currentMarker.code_type_base_demande : ''} 
-      ${currentMarker.description_type_demande? '</br><b>description_type_demande: </b>' + currentMarker.description_type_demande : ''} 
-      ${currentMarker.description_type_batiment? '</br><b>description_type_batiment: </b>' + currentMarker.description_type_batiment : ''} 
-      ${currentMarker.nature_travaux? '</br><b>nature_travaux: </b>' + currentMarker.nature_travaux : ''} 
-      ${currentMarker.nb_logements? '</br><b>nb_logements: </b>' + currentMarker.nb_logements : ''} 
-      ${currentMarker.longitude? '<b>longitude: </b>' + currentMarker.longitude : ''} 
-      ${currentMarker.latitude? '<b>latitude: </b>' + currentMarker.latitude : ''} 
-      ${currentMarker.direction ? '<b>direction: </b>' + currentMarker.direction : ''}
-      ${currentMarker.notes ? '<b>notes: </b>' + currentMarker.notes : ''}
-      ${currentMarker.buildingType ? '<b>Type de batiment: </b>' + currentMarker.buildingType : ''}
-      ${currentMarker.unitsAvailable ? '</br><b>Unites disponibles: </b>' + currentMarker.unitsAvailable : ''}
-      ${currentMarker.status ? '</br><b>Status: </b>' + currentMarker.status : ''}
-      ${currentMarker.deliveryDate ? '</br><b>Date de livraison: </b>' + currentMarker.deliveryDate : ''}
-      ${currentMarker.address ? '</br><b>Addresse: </b>' + currentMarker.address : ''}
-      ${currentMarker.contact ? '</br><b>Contact: </b>' + currentMarker.contact : ''}
+      content: `
+      ${currentMarker.adresse_principale ? '<b style = "font-weight:bold;">Adresse Principale : </b>' + currentMarker.adresse_principale + '</br>' : ''}  
+      ${currentMarker.telephone ? '<b style = "font-weight:bold;">Téléphone : </b>' + currentMarker.telephone + '</br>' : ''}  
+      ${currentMarker.courriel ? '<b style = "font-weight:bold;">Courriel : </b>' + currentMarker.courriel + '</br>' : ''}  
+      ${currentMarker.description ? '<b style = "font-weight:bold;">Description : </b>' + currentMarker.description + '</br>' : ''}  
+      ${currentMarker.types ? '<b style = "font-weight:bold;">Types : </b>' + currentMarker.types + '</br>' : ''}  
+      ${currentMarker.installations ? '<b style = "font-weight:bold;">Installations : </b>' + currentMarker.installations + '</br>' : ''}  
+      ${currentMarker.activites ? '<b style = "font-weight:bold;">Activites : </b>' + currentMarker.activites + '</br>' : ''}  
+      ${currentMarker.statut_ouverture ? '<b style = "font-weight:bold;">Statut Ouverture : </b>' + currentMarker.statut_ouverture + '</br>' : ''}  
+      ${currentMarker.horaire_par_jour ? '<b style = "font-weight:bold;">Horaire Par Jour : </b>' + currentMarker.horaire_par_jour + '</br>' : ''}  
+      ${currentMarker.paiement ? '<b style = "font-weight:bold;">Paiement : </b>' + currentMarker.paiement + '</br>' : ''}  
+
+      ${currentMarker.id_permis? '<b style = "font-weight:bold;">Numéro du permis: </b>' + currentMarker.id_permis : ''} 
+      ${currentMarker.date_emission? '</br><b style = "font-weight:bold;">Date d\'émission: </b>' + currentMarker.date_emission : ''} 
+      ${currentMarker.emplacement? '</br><b style = "font-weight:bold;">Adresse concernée: </b>' + currentMarker.emplacement : ''} 
+      ${currentMarker.arrondissement? '</br><b style = "font-weight:bold;">arrondissement: </b>' + currentMarker.arrondissement : ''} 
+      ${currentMarker.description_type_demande? '</br><b style = "font-weight:bold;">Description de la demande : </b>' + currentMarker.description_type_demande : ''} 
+      ${currentMarker.description_type_batiment? '</br><b style = "font-weight:bold;">Description du type de bâtiment : </b>' + currentMarker.description_type_batiment : ''} 
+      ${currentMarker.nature_travaux? '</br><b style = "font-weight:bold;">Nature des travaux: </b>' + currentMarker.nature_travaux : ''} 
+      ${currentMarker.nb_logements? '</br><b style = "font-weight:bold;">Nombre de logements: </b>' + currentMarker.nb_logements : ''} 
+
+      ${currentMarker.direction ? '<b style = "font-weight:bold;">Direction: </b>' + currentMarker.direction : ''}
+      ${currentMarker.mob_reduit? '<b style = "font-weight:bold;">Accès à mobilité réduite: </b>' + currentMarker.mob_reduit : ''} 
+      ${currentMarker.hvoiture_n? '<b style = "font-weight:bold;">Navette 1: </b>' + currentMarker.hvoiture_n : ''} 
+      ${currentMarker.hvoiture_nw ? '<b style = "font-weight:bold;">Navette 2: </b>' + currentMarker.hvoiture_nw : ''}
+
+      ${currentMarker.notes ? '<b style = "font-weight:bold;">notes: </b>' + currentMarker.notes : ''}
+      ${currentMarker.buildingType ? '<b style = "font-weight:bold;">Type de batiment: </b>' + currentMarker.buildingType : ''}
+      ${currentMarker.unitsAvailable ? '</br><b style = "font-weight:bold;">Unites disponibles: </b>' + currentMarker.unitsAvailable : ''}
+      ${currentMarker.status ? '</br><b style = "font-weight:bold;">Status: </b>' + currentMarker.status : ''}
+      ${currentMarker.deliveryDate ? '</br><b style = "font-weight:bold;">Date de livraison: </b>' + currentMarker.deliveryDate : ''}
+      ${currentMarker.address ? '</br><b style = "font-weight:bold;">Addresse: </b>' + currentMarker.address : ''}
+      ${currentMarker.contact ? '</br><b style = "font-weight:bold;">Contact: </b>' + currentMarker.contact : ''}
       `,
       position: currentMarker.position,
-      maxWidth: 200
+      maxWidth: 300
     });
 
     infowindow.open(
@@ -135,9 +148,15 @@ const MapComponent = ({filtersMap}) => {
         fillColor = '#F0741F';
         fillOpacity = 0.1;
       } else if(feature.getProperty('ADIDU')) {//Indice equite vie
-        strokeColor = '#F01FB7';
-        fillColor = '#F01FB7';
-        fillOpacity = 0.1;
+        strokeColor = 'red';
+        fillColor = 'red';
+        if(feature.getProperty('Indice_emv') >= 4) {//milieu vulnérable et prioritaire
+          fillOpacity = 0.7;
+        } else if(feature.getProperty('Indice_emv') === 3) {//milieu vulnérable et non prioritaire
+          fillOpacity = 0.5;
+        } else {// milieu non vulnérable
+          fillOpacity = 0.3;
+        }
       }
       return {
           fillColor: fillColor,
@@ -155,30 +174,28 @@ const MapComponent = ({filtersMap}) => {
     });
 
 
-    map.data.addListener('click', function(event) {debugger
+    map.data.addListener('click', function(event) {
       if (event.feature.getGeometry().getType() === 'Polygon' || event.feature.getGeometry().getType() === 'MultiPolygon') {
         let infowindow = new window.google.maps.InfoWindow({
-          content: `${event.feature.Gg.usage_ ? '<b>usage_: </b>' + event.feature.Gg.usage_ : ''} ${event.feature.Gg.zone_ ? '</br><b>zone_: </b>' + event.feature.Gg.zone_ : ''}
-                    ${event.feature.Gg.ID ? '<b>ID: </b>' + event.feature.Gg.ID : ''} ${event.feature.Gg.MUNICIPALITE ? '</br><b>MUNICIPALITE: </b>' + event.feature.Gg.MUNICIPALITE : ''}
-                    ${event.feature.Gg.NO_ZONE ? '<b>NO_ZONE: </b>' + event.feature.Gg.NO_ZONE : ''} ${event.feature.Gg.GRILLEUSAGE ? '</br><b>GRILLEUSAGE: </b>' + event.feature.Gg.GRILLEUSAGE : ''}
-                    ${event.feature.Gg.autoch_min ? '<b>autoch_min: </b>' + event.feature.Gg.autoch_min : ''}
-                    ${event.feature.Gg.crimes_pon ? '</br><b>crimes_pon: </b>' + event.feature.Gg.crimes_pon : ''}
-                    ${event.feature.Gg.log_priv20 ? '</br><b>log_priv20: </b>' + event.feature.Gg.log_priv20 : ''}
-                    ${event.feature.Gg.nb_biblio_ ? '</br><b>nb_biblio_: </b>' + event.feature.Gg.nb_biblio_ : ''}
-                    ${event.feature.Gg.nb_commerc ? '</br><b>nb_commerc: </b>' + event.feature.Gg.nb_commerc : ''}
-                    ${event.feature.Gg.nb_ecoles_ ? '</br><b>nb_ecoles_: </b>' + event.feature.Gg.nb_ecoles_ : ''}
-                    ${event.feature.Gg.nb_emplois ? '</br><b>nb_emplois: </b>' + event.feature.Gg.nb_emplois : ''}
-                    ${event.feature.Gg.nb_equipem ? '</br><b>nb_equipem: </b>' + event.feature.Gg.nb_equipem : ''}
-                    ${event.feature.Gg.nb_organis ? '</br><b>nb_organis: </b>' + event.feature.Gg.nb_organis : ''}
-                    ${event.feature.Gg.nb_pass_tc ? '</br><b>nb_pass_tc: </b>' + event.feature.Gg.nb_pass_tc : ''}
-                    ${event.feature.Gg.nb_pharmac ? '</br><b>nb_pharmac: </b>' + event.feature.Gg.nb_pharmac : ''}
-                    ${event.feature.Gg.sans_diplo ? '</br><b>sans_diplo: </b>' + event.feature.Gg.sans_diplo : ''}
-                    ${event.feature.Gg.superficie ? '</br><b>superficie: </b>' + event.feature.Gg.superficie : ''}
-                    ${event.feature.Gg.type ? '</br><b>type: </b>' + event.feature.Gg.type : ''}
-                    ${event.feature.Gg.ACP_sociale ? '</br><b>ACP_sociale: </b>' + event.feature.Gg.ACP_sociale : ''}
-                    ${event.feature.Gg.ACP_securité ? '</br><b>ACP_securité: </b>' + event.feature.Gg.ACP_securité : ''}
-                    ${event.feature.Gg.ACP_proximité ? '</br><b>ACP_proximité: </b>' + event.feature.Gg.ACP_proximité : ''}
-                    ${event.feature.Gg.ACP_CultSportLoisir ? '</br><b>ACP_CultSportLoisir: </b>' + event.feature.Gg.ACP_CultSportLoisir : ''}
+          content: `
+                    ${event.feature.Gg.usage_ ? '<b style = "font-weight:bold;">usage_: </b>' + event.feature.Gg.usage_ : ''} ${event.feature.Gg.zone_ ? '</br><b style = "font-weight:bold;">zone_: </b>' + event.feature.Gg.zone_ : ''}
+                    ${event.feature.Gg.ID ? '<b style = "font-weight:bold;">ID: </b>' + event.feature.Gg.ID : ''} ${event.feature.Gg.MUNICIPALITE ? '</br><b style = "font-weight:bold;">MUNICIPALITE: </b>' + event.feature.Gg.MUNICIPALITE : ''}
+                    ${event.feature.Gg.NO_ZONE ? '<b style = "font-weight:bold;">NO_ZONE: </b>' + event.feature.Gg.NO_ZONE : ''} ${event.feature.Gg.GRILLEUSAGE ? '</br><b style = "font-weight:bold;">GRILLEUSAGE: </b>' + event.feature.Gg.GRILLEUSAGE : ''}
+                    
+                    ${event.feature.Gg.Nom ? '<b style = "font-weight:bold;">Nom: </b>' + event.feature.Gg.Nom : ''}
+                    ${event.feature.Gg.NOM ? '<b style = "font-weight:bold;">Nom: </b>' + event.feature.Gg.NOM : ''}
+                    ${event.feature.Gg.adresse ? '</br><b style = "font-weight:bold;">Adresse: </b>' + event.feature.Gg.adresse : ''}
+                    ${event.feature.Gg.secteur ? '</br><b style = "font-weight:bold;">Secteur: </b>' + event.feature.Gg.secteur : ''}
+                    ${event.feature.Gg.Type ? '</br><b style = "font-weight:bold;">Type de parc: </b>' + event.feature.Gg.Type : ''}
+                    ${event.feature.Gg.TYPE ? '</br><b style = "font-weight:bold;">Type de parc: </b>' + event.feature.Gg.TYPE : ''}
+
+                    ${event.feature.Gg.ADIDU ? '<b style = "font-weight:bold;">Indice des ressources de culture, sport et loisir: </b>' + event.feature.Gg.ACP_Cult_1 : ''}
+                    ${event.feature.Gg.ADIDU ? '</br><b style = "font-weight:bold;">Indice économique: </b>' + event.feature.Gg.ACP_econo_ : ''}
+                    ${event.feature.Gg.ADIDU ? '</br><b style = "font-weight:bold;">Indice environnementale: </b>' + event.feature.Gg.ACP_envi_1 : ''}
+                    ${event.feature.Gg.ADIDU ? '</br><b style = "font-weight:bold;">Indice des ressources de proximité : </b>' + event.feature.Gg.ACP_prox_1 : ''}
+                    ${event.feature.Gg.ADIDU ? '</br><b style = "font-weight:bold;">Indice de sécurité: </b>' + event.feature.Gg.ACP_secu_1 : ''}
+                    ${event.feature.Gg.ADIDU ? '</br><b style = "font-weight:bold;">indice sociale: </b>' + event.feature.Gg.ACP_soci_1 + '</br>' : ''}
+                    ${event.feature.Gg.ADIDU ? '</br><b style = "font-weight:bold;">Indice totale: </b>' + event.feature.Gg.Indice_emv + ' </br>' + (event.feature.Gg.Indice_emv === 3 ? '<p style = "font-weight:bold;color:red;">(milieu vulnérable et non prioritaire)</p>' : (event.feature.Gg.Indice_emv >= 4 ? '<p style = "font-weight:bold;color:red;">(milieu vulnérable et prioritaire)</p>' : '<p style = "font-weight:bold;color:green;">(milieu non vulnérable)</p>')) : ''}
                     
           `,
 
@@ -196,7 +213,7 @@ const MapComponent = ({filtersMap}) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        onValue(ref(database, 'properties'), (snapshot) => {debugger
+        onValue(ref(database, 'properties'), (snapshot) => {
           const data = snapshot.val();
           setDataProperties(data.reduce((acc, p)=>{
             acc[`${p.city}`] = acc[`${p.city}`].concat([p])

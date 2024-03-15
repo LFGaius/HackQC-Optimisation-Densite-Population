@@ -13,7 +13,7 @@ export const Proprietes = () => {
   const [propriete, setPropriete] = useState([]);
 
   useEffect(() => {
-    onValue(ref(database, 'properties'), (snapshot) => {debugger
+    onValue(ref(database, 'properties'), (snapshot) => {
       const data = snapshot.val();
       setPropriete(data);
     });
@@ -40,7 +40,7 @@ export const Proprietes = () => {
       const savedProperty = saveProperty(property);
       setProperty(savedProperty);
       const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(property.address)}&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`;
-      try {debugger
+      try {
           const response = await fetch(url);
           const data = await response.json();
           if (data.status === 'OK') {
@@ -58,7 +58,6 @@ export const Proprietes = () => {
           console.error('Geocoding error:', error);
         }
 
-      // alert("Donnees enregistre avec succes")
       
       setShow(false);
     } else {
@@ -74,15 +73,16 @@ export const Proprietes = () => {
         <button  className="btn btn-info  w-10 my-2" onClick={handleShow} style={{ fontWeight: 'bold', color : 'white' }}><FontAwesomeIcon icon={faPlus} />Ajouter Annonces</button>
         <Row className="justify-content-center">
           {propriete.map((proprieteItem) => (
-            <Col key={proprieteItem.id} xs={12} md={6} lg={6} className="mb-4">
+            <Col key={proprieteItem.id} xs={12} md={12} lg={12} className="mb-4">
               <Card className="shadow-sm">
                 <Card.Body>
-                  <Card.Title className='text-primary'>{proprieteItem.user}</Card.Title>
-                  <Card.Text>Contact: {proprieteItem.contact}</Card.Text>
-                  <Card.Text>Adresse: {proprieteItem.address}</Card.Text>
-                  <Card.Text>Type de proprieté: {proprieteItem.buildingType}</Card.Text>
-                  <Card.Text>Nombre Unités: {proprieteItem.unitsAvailable}</Card.Text>
-                  <Card.Text>Status: {proprieteItem.status}</Card.Text>
+                  <Card.Title className='text-primary'>{proprieteItem.name}</Card.Title>
+                  <Card.Text><b style = {{fontWeight:'bold'}}>Contact:</b> {proprieteItem.contact}</Card.Text>
+                  <Card.Text><b style = {{fontWeight:'bold'}}>Adresse:</b> {proprieteItem.address}</Card.Text>
+                  <Card.Text><b style = {{fontWeight:'bold'}}>Type de proprieté:</b> {proprieteItem.buildingType}</Card.Text>
+                  <Card.Text><b style = {{fontWeight:'bold'}}>Nombre Unités:</b> {proprieteItem.unitsAvailable}</Card.Text>
+                  <Card.Text><b style = {{fontWeight:'bold'}}>Status:</b> {proprieteItem.status}</Card.Text>
+                  {proprieteItem.status === 'En construction' && <Card.Text><b style = {{fontWeight:'bold'}}>Date de livraison:</b> {proprieteItem.deliveryDate}</Card.Text>}
                   <h5>
                     Description
                     <Button variant="link" onClick={() => toggleAfficherSuite(proprieteItem.id)}>
@@ -90,7 +90,7 @@ export const Proprietes = () => {
                     </Button>
                   </h5>
                   <Card.Text>
-                    {proprieteEtendue === proprieteItem.id ? proprieteItem.comment : `${proprieteItem.comment?.slice(0, 100)}...`}
+                    
                   </Card.Text>
                 </Card.Body>
               </Card>

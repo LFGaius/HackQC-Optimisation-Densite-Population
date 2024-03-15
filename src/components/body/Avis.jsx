@@ -1,5 +1,5 @@
 import React,{useState, useEffect} from 'react';
-import { validateReview, saveReview } from './AvisAction';
+import { validateReview } from './AvisAction';
 import {Card,Modal, Button, Form,Row, Col,} from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -14,7 +14,7 @@ export const Avis = () => {
   const [avis, setAvis] = useState([]);
 
   useEffect(() => {
-    onValue(ref(database, 'comments'), (snapshot) => {debugger
+    onValue(ref(database, 'comments'), (snapshot) => {
       const data = snapshot.val();
       setAvis(data);
     });
@@ -29,16 +29,12 @@ export const Avis = () => {
     setReview({ ...review, [name]: value });
   };
 
-  const handleSave = () => {debugger
+  const handleSave = () => {
     const validationResult = validateReview(review);
     if (validationResult.isValid) {
       review.id = avis.length;
       review.user = 'General';
       set(ref(database, 'comments/'+avis.length+''), review);
-      // const savedReview = saveReview(review);
-      // setReview(savedReview);
-
-      // alert("Donnees enregistre avec succes")
 
       setShow(false);
     } else {
