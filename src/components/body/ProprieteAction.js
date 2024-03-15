@@ -10,8 +10,6 @@ const validateProperty = (property) => {
 
 // Fonction pour sauvegarder les données de propriété
 const saveProperty = (property) => {
-  // Effectuer une action de sauvegarde ici, par exemple envoyer les données à un serveur
-  console.log("Propriété à sauvegarder :", property);
   // Réinitialiser le formulaire après la sauvegarde
   return {
     buildingType: '',

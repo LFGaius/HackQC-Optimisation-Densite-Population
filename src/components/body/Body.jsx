@@ -9,7 +9,7 @@ const Body = () => {
   const [filters, setFilters] = useState({city:"montreal", displayIndiceEquiteMilieuxVie : false, displayZonage : false, displayReseauCyclable : false, displayParcsEspacesVerts : false, displayPointArretBus : false, displayPlacesPubliques : false, displayPermis : false});
   const [childKey, setChildKey] = useState(0);
 
-  const handleFilterChange = (selectedOptions) => {debugger
+  const handleFilterChange = (selectedOptions) => {
     setFilters(selectedOptions);
     setChildKey(childKey+1);//just to enforce reload
   };

@@ -11,8 +11,6 @@ const validateReview = (review) => {
 
 // Fonction pour sauvegarder les Avis
 const saveReview = (review) => {
-  // Effectuer une action de sauvegarde ici, par exemple envoyer les données à un serveur
-  console.log("Propriété à sauvegarder :", review);
   // Réinitialiser le formulaire après la sauvegarde
   return {
     name: '',
