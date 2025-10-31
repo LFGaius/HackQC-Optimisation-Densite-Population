@@ -30,6 +30,19 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <script src="https://cdn.c360a.salesforce.com/beacon/c360a/e6cb7b49-bbae-4ae4-978b-203ce1f58c83/scripts/c360a.min.js"></script>
+    SalesforceInteractions.init({
+            consents: [{
+                provider: 'ExampleProvider',
+                purpose: 'Tracking',
+                status: SalesforceInteractions.ConsentStatus.OptIn
+            }]
+        })
+        .then(() => {
+            console.log('Consent set successfully');
+        })
+        
+        // Set the logging level for debugging purposes
+        SalesforceInteractions.setLoggingLevel(4); 
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
