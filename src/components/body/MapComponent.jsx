@@ -112,7 +112,33 @@ const MapComponent = ({filtersMap}) => {
         break;
     }
 
-  
+    map.data.setStyle(function(feature) {
+      let strokeColor = 'grey';
+      let fillColor = 'grey';
+      let strokeWeight = 1;
+      let strokeOpacity = 1;
+      let fillOpacity = 0.1;
+      let label = 'label ';
+      let title = 'title ';
+      let zIndex;
+      if (feature.getProperty('ID_CYCL') || feature.getProperty('IDRTE')) {//only for pistes cyclable mtl - shawi
+          strokeColor = 'blue';
+          strokeWeight = 3;
+          strokeOpacity = 0.6;
+          zIndex = 10;
+      } else if(feature.getProperty('TYPE') === 'Parc' || feature.getProperty('TYPE') === 'Espace vert' || feature.getProperty('NUM_INDEX')) {//NUM_INDEX only available from motl parks and green spaces data
+        strokeColor = 'green';
+        fillColor = 'green';
+        fillOpacity = 0.5;
+      } else if(feature.getProperty('zone_') || feature.getProperty('usage_')) {//Zonages
+        strokeColor = '#F0741F';
+        fillColor = '#F0741F';
+        fillOpacity = 0.1;
+      } else if(feature.getProperty('ADIDU')) {//Indice equite vie
+        strokeColor = '#F01FB7';
+        fillColor = '#F01FB7';
+        fillOpacity = 0.1;
+      }
       return {
           fillColor: fillColor,
           strokeColor: strokeColor,
