@@ -9,20 +9,21 @@ const Body = () => {
   const [filters, setFilters] = useState({city:"montreal", displayIndiceEquiteMilieuxVie : false, displayZonage : false, displayReseauCyclable : false, displayParcsEspacesVerts : false, displayPointArretBus : false, displayPlacesPubliques : false, displayPermis : false});
   const [childKey, setChildKey] = useState(0);
 
-  const handleFilterChange = (selectedOptions) => {debugger
+  const handleFilterChange = (selectedOptions) => {
     setFilters(selectedOptions);
     setChildKey(childKey+1);//just to enforce reload
   };
   return (
     <> 
-      <FilterBar onFilterChange={handleFilterChange} />       
+      <FilterBar onFilterChange={handleFilterChange} />
+        
       <Row>
-        <Col xs={12} lg={7} className='ml-2 border'> 
+        <Col xs={12} lg={8} className='ml-2'> 
           <Container>
           <MapComponent filtersMap = {filters} key={childKey}/>
           </Container>
         </Col>
-        <Col xs={12} lg={5} className='border'> 
+        <Col xs={12} lg={4} className='border'> 
           <SideBar />
         </Col>
       </Row>

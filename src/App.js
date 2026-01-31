@@ -5,6 +5,20 @@ import Body from './components/body/Body';
 
 function App() {
 
+  window.SalesforceInteractions.init({
+            consents: [{
+                provider: 'ExampleProvider',
+                purpose: 'Tracking',
+                status: window.SalesforceInteractions.ConsentStatus.OptIn
+            }]
+        })
+        .then(() => {
+            console.log('Consent set successfully');
+        })
+        
+        // Set the logging level for debugging purposes
+        window.SalesforceInteractions.setLoggingLevel(4); 
+  
   return (
     <div className="App">
       <NavBar />

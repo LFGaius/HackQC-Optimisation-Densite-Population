@@ -1,13 +1,12 @@
 import React from 'react'
 import {Routes, Route } from 'react-router-dom';
-import {Button, Nav} from "react-bootstrap";
+import {Nav} from "react-bootstrap";
 import { Avis } from './Avis';
 import { Proprietes } from './Proprietes';
 
 export const SideBar = () => {
   return (
     <> 
-
       <Nav variant="pills" className='pt-2'>
         <Nav.Item>
           <Nav.Link className='btn btn-info ' href="/" style={{ fontWeight: 'bold' }}>Avis</Nav.Link>

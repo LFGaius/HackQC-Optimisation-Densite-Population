@@ -1,14 +1,31 @@
 import React, { useState } from "react";
-import Container from "react-bootstrap/Container";
-import {Navbar,Nav, Button, Form,Row, Col,} from "react-bootstrap";
+import {Navbar,Nav, Form,Row, Col,} from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { MultiSelect } from "react-multi-select-component";
-
+const OPTIONS = {
+  'montreal' : [
+    { label: "🕵️‍♂️Indice Equite Milieux Vie ( intensité du 🔴)", value: "displayIndiceEquiteMilieuxVie" },
+    { label: "🚲Zone Cyclable", value: "displayReseauCyclable"},
+    { label: "🌲Espace Verts", value: "displayParcsEspacesVerts"},
+    { label: "🎡Places publiques", value: "displayPlacesPubliques"},
+    { label: "📜Permis de travaux", value: "displayPermis"}
+  ],
+  'shawinigan' : [
+    { label: "🗺️Zonage", value: "displayZonage" },
+    { label: "🚲Zone Cyclable", value: "displayReseauCyclable"},
+    { label: "🌲Espace Verts", value: "displayParcsEspacesVerts"},
+    { label: "🚍Arret Bus", value: "displayPointArretBus"},
+  ],
+  'sherbrooke' : [
+    { label: "🗺️Zonage", value: "displayZonage" }
+  ]
+};
 
 const FilterBar = ({onFilterChange}) => {
 
   const [selected, setSelected] = useState([]);
+  const [options, setOptions] = useState(OPTIONS['montreal']);
   const [selectedOptions, setSelectedOptions] = useState({
     city: 'montreal',
     displayZonage: false,
@@ -22,13 +39,16 @@ const FilterBar = ({onFilterChange}) => {
   
 
   const handlePropertyTypeChange = (city) => {
-    setSelectedOptions({ ...selectedOptions, city });
+    setSelectedOptions({ displayZonage: false,
+      displayReseauCyclable: false,
+      displayParcsEspacesVerts: false,
+      displayPointArretBus: false,
+      displayPlacesPubliques: false,
+      displayPermis: false,
+      displayIndiceEquiteMilieuxVie: false, city });
+    setOptions(OPTIONS[`${city}`])
+    setSelected([])
   };
-
-  // const handleCheckboxChange = (e) => {
-  //   const { name, checked } = e.target;
-  //   setSelectedOptions({ ...selectedOptions, [name]: checked });
-  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -53,120 +73,40 @@ const FilterBar = ({onFilterChange}) => {
   };
 
   const handleMultiPickChange = (selectedElmts) => {
-    debugger
     setSelected(selectedElmts);
     rebuildSelectedOptions(selectedElmts);
   };
-
-  const options = [
-    { label: "📜Indice Equite Milieux Vie", value: "displayIndiceEquiteMilieuxVie" },
-    { label: "🗺️Zonage", value: "displayZonage" },
-    { label: "🚲Zone Cyclable", value: "displayReseauCyclable"},
-    { label: "🌲Espace Verts", value: "displayParcsEspacesVerts"},
-    { label: "🚍Arret Bus", value: "displayPointArretBus"},
-    { label: "🎡Places publiques", value: "displayPlacesPubliques"},
-    { label: "📜Permis de travaux", value: "displayPermis"},
-  ];
 
   return (
     <>
       <Navbar bg="light" className="my-2 mx-3 p-2">
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto space-between" style={{ width: '100%'}}>
-          
-                  <Row style={{ width: '100%'}}>
-                    <Col className="col-3">
-                    <button className="btn btn-info"><FontAwesomeIcon icon={faSearch} onClick={handleSubmit} /></button>
-                    </Col>
-                    <Col className="col-4">
-                      <Form.Select aria-label="city" onChange={(e) => handlePropertyTypeChange(e.target.value)}>
-                        <option value="montreal">Montréal</option>
-                        <option value="shawinigan">Shawinigan</option>
-                        <option value="sherbrooke">Sherbrooke</option>
-                      </Form.Select>
-                    </Col>
-                    <Col className="col-5">
-                    <MultiSelect
-                      options={options}
-                      value={selected}
-                      onChange={handleMultiPickChange}
-                      labelledBy="Select Features to display"
-                    />
-                      {/* <Form.Select aria-label="city" onChange={(e) => handlePropertyTypeChange(e.target.value)}>
-                        <option value="montreal">Montréal</option>
-                        <option value="shawinigan">Shawinigan</option>
-                        <option value="sherbrooke">Sherbrooke</option>
-                      </Form.Select> */}
-                    </Col>
-                  {/* </Row>
-                  <Row> */}
-                    {/* <Col className="col-3 mt-2">
-                      <Form.Check
-                        type="checkbox"
-                        label="Indice Equite Milieux Vie"
-                        name="displayIndiceEquiteMilieuxVie"
-                        onChange={handleCheckboxChange}
-                      />
-                    </Col>
-                    <Col className="col-3 mt-2">
-                      <Form.Check
-                        type="checkbox"
-                        label="Zonage"
-                        name="displayZonage"
-                        onChange={handleCheckboxChange}
-                      />
-                    </Col>
-                    <Col className="col-3 mt-2">
-                      <Form.Check
-                        type="checkbox"
-                        label="Zone Cyclable"
-                        name="displayReseauCyclable"
-                        onChange={handleCheckboxChange}
-                      />
-                    </Col>
-                    <Col className="col-3 mt-2">
-                      <Form.Check
-                        type="checkbox"
-                        label="Espace Verts"
-                        name="displayParcsEspacesVerts"
-                        onChange={handleCheckboxChange}
-                      />
-                    </Col>
-                    <Col className="col-3 mt-2">
-                      <Form.Check
-                        type="checkbox"
-                        label="Arret Bus"
-                        name="displayPointArretBus"
-                        onChange={handleCheckboxChange}
-                      />
-                    </Col>
-                    <Col className="col-3 mt-2">
-                      <Form.Check
-                        type="checkbox"
-                        label="Places publiques"
-                        name="displayPlacesPubliques"
-                        onChange={handleCheckboxChange}
-                      />
-                    </Col>
-                    <Col className="m-lg-2">
-                      <Form.Check
-                        type="checkbox"
-                        label="Permis de travaux"
-                        name="displayPermis"
-                        onChange={handleCheckboxChange}
-                      />
-                    </Col> */}
-                    
-                    
-                  </Row>
-                
-              
-            
-          
+            <Row style={{ width: '100%'}}>
+              <Col className="col-4">
+                <span style={{color:'#535353'}}>Ville</span>
+                <Form.Select aria-label="city" onChange={(e) => handlePropertyTypeChange(e.target.value)}>
+                  <option value="montreal">Montréal</option>
+                  <option value="shawinigan">Shawinigan</option>
+                  <option value="sherbrooke">Sherbrooke</option>
+                </Form.Select>
+              </Col>
+              <Col className="col-5">
+                <span style={{color:'#535353'}}>Eléments à afficher</span>
+              <MultiSelect
+                options={options}
+                value={selected}
+                onChange={handleMultiPickChange}
+                labelledBy="Select Features to display"
+              />
+              </Col>
+              <Col className="col-3 d-flex justify-content-end">
+                <button className="btn btn-info mt-4"  style={{ color: 'white', height:'40px'}}><FontAwesomeIcon style={{ color: 'white'}} icon={faSearch} onClick={handleSubmit} /></button>
+              </Col>
+            </Row>
           </Nav>
         </Navbar.Collapse>    
       </Navbar>
-   
     </>
   );
 };
