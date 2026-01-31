@@ -155,44 +155,6 @@ const MapComponent = ({filtersMap}) => {
     });
 
 
-    map.data.addListener('click', function(event) {debugger
-      if (event.feature.getGeometry().getType() === 'Polygon' || event.feature.getGeometry().getType() === 'MultiPolygon') {
-        let infowindow = new window.google.maps.InfoWindow({
-          content: `${event.feature.Gg.usage_ ? '<b>usage_: </b>' + event.feature.Gg.usage_ : ''} ${event.feature.Gg.zone_ ? '</br><b>zone_: </b>' + event.feature.Gg.zone_ : ''}
-                    ${event.feature.Gg.ID ? '<b>ID: </b>' + event.feature.Gg.ID : ''} ${event.feature.Gg.MUNICIPALITE ? '</br><b>MUNICIPALITE: </b>' + event.feature.Gg.MUNICIPALITE : ''}
-                    ${event.feature.Gg.NO_ZONE ? '<b>NO_ZONE: </b>' + event.feature.Gg.NO_ZONE : ''} ${event.feature.Gg.GRILLEUSAGE ? '</br><b>GRILLEUSAGE: </b>' + event.feature.Gg.GRILLEUSAGE : ''}
-                    ${event.feature.Gg.autoch_min ? '<b>autoch_min: </b>' + event.feature.Gg.autoch_min : ''}
-                    ${event.feature.Gg.crimes_pon ? '</br><b>crimes_pon: </b>' + event.feature.Gg.crimes_pon : ''}
-                    ${event.feature.Gg.log_priv20 ? '</br><b>log_priv20: </b>' + event.feature.Gg.log_priv20 : ''}
-                    ${event.feature.Gg.nb_biblio_ ? '</br><b>nb_biblio_: </b>' + event.feature.Gg.nb_biblio_ : ''}
-                    ${event.feature.Gg.nb_commerc ? '</br><b>nb_commerc: </b>' + event.feature.Gg.nb_commerc : ''}
-                    ${event.feature.Gg.nb_ecoles_ ? '</br><b>nb_ecoles_: </b>' + event.feature.Gg.nb_ecoles_ : ''}
-                    ${event.feature.Gg.nb_emplois ? '</br><b>nb_emplois: </b>' + event.feature.Gg.nb_emplois : ''}
-                    ${event.feature.Gg.nb_equipem ? '</br><b>nb_equipem: </b>' + event.feature.Gg.nb_equipem : ''}
-                    ${event.feature.Gg.nb_organis ? '</br><b>nb_organis: </b>' + event.feature.Gg.nb_organis : ''}
-                    ${event.feature.Gg.nb_pass_tc ? '</br><b>nb_pass_tc: </b>' + event.feature.Gg.nb_pass_tc : ''}
-                    ${event.feature.Gg.nb_pharmac ? '</br><b>nb_pharmac: </b>' + event.feature.Gg.nb_pharmac : ''}
-                    ${event.feature.Gg.sans_diplo ? '</br><b>sans_diplo: </b>' + event.feature.Gg.sans_diplo : ''}
-                    ${event.feature.Gg.superficie ? '</br><b>superficie: </b>' + event.feature.Gg.superficie : ''}
-                    ${event.feature.Gg.type ? '</br><b>type: </b>' + event.feature.Gg.type : ''}
-                    ${event.feature.Gg.ACP_sociale ? '</br><b>ACP_sociale: </b>' + event.feature.Gg.ACP_sociale : ''}
-                    ${event.feature.Gg.ACP_securité ? '</br><b>ACP_securité: </b>' + event.feature.Gg.ACP_securité : ''}
-                    ${event.feature.Gg.ACP_proximité ? '</br><b>ACP_proximité: </b>' + event.feature.Gg.ACP_proximité : ''}
-                    ${event.feature.Gg.ACP_CultSportLoisir ? '</br><b>ACP_CultSportLoisir: </b>' + event.feature.Gg.ACP_CultSportLoisir : ''}
-                    
-          `,
-
-          position: event.latLng.toJSON(),
-          maxWidth:200
-        });
-
-        infowindow.open(
-          map
-        );
-      };
-    });
-  }
-
   useEffect(() => {
     const fetchData = async () => {
       try {

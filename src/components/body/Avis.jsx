@@ -18,7 +18,7 @@ export const Avis = () => {
       const data = snapshot.val();
       setAvis(data);
     });
-  }, []); // The empty array ensures this effect runs only once after the initial render
+  }, []); 
 
 
   const handleClose = () => setShow(false);
@@ -35,15 +35,12 @@ export const Avis = () => {
       review.id = avis.length;
       review.user = 'General';
       set(ref(database, 'comments/'+avis.length+''), review);
-      // const savedReview = saveReview(review);
-      // setReview(savedReview);
-
-      // alert("Donnees enregistre avec succes")
+     
 
       setShow(false);
     } else {
       console.error("Erreur de validation :", validationResult.errorMessage);
-      // Gérer les erreurs de validation ici, par exemple afficher un message d'erreur à l'utilisateur
+     
       alert("Veillez remplir tout les champs")
     }
   };
